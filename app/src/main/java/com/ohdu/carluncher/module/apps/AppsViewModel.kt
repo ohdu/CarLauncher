@@ -23,19 +23,22 @@ class AppsViewModel : ViewModel() {
     private fun insertApps() {
         viewModelScope.launch(Dispatchers.IO) {
             val appInfo = AppUtils.getAppsInfo()
+            // 将应用列表进行排序  系统应用放到最下面
+            appInfo.sortBy { it.isSystem }
             val daoAppInfoBean = mutableListOf<AppInfoBean>()
-            appInfo.forEachIndexed { index, appInfo ->
+            appInfo.forEachIndexed { index, it ->
                 daoAppInfoBean.add(
                     AppInfoBean(
-                        appInfo.packageName,
-                        appInfo.name,
-                        appInfo.icon,
-                        appInfo.packagePath,
-                        appInfo.versionName,
-                        appInfo.versionCode,
-                        appInfo.minSdkVersion,
-                        appInfo.targetSdkVersion,
-                        appInfo.isSystem
+                        it.packageName,
+                        it.name,
+                        it.icon,
+                        it.packagePath,
+                        it.versionName,
+                        it.versionCode,
+                        it.minSdkVersion,
+                        it.targetSdkVersion,
+                        it.isSystem,
+                        sortWeight = index
                     )
                 )
             }
@@ -47,7 +50,7 @@ class AppsViewModel : ViewModel() {
     private fun queryApps() {
         viewModelScope.launch(Dispatchers.IO) {
             val appInfo = AppUtils.getAppsInfo()
-            CarDatabase.getDatabase().carDao().appInfo()
+            CarDatabase.getDatabase().carDao().appInfoToFlow()
                 .transform { localData ->
                     emit(localData.filter { localShowData ->
                         localShowData.icon =

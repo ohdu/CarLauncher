@@ -18,5 +18,9 @@ data class AppInfoBean(
     var minSdkVersion: Int = 0,
     var targetSdkVersion: Int = 0,
     var isSystem: Boolean = true,
-    var isShow: Boolean = !isSystem
+    var isShow: Boolean = !isSystem,
+    // 排序字段 数字越大 权重越高
+    var sortWeight: Int = 0,
+    // 是否显示在侧边导航栏
+    var navShow:Boolean = false
 )

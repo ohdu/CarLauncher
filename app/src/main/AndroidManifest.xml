@@ -14,7 +14,7 @@
         android:theme="@style/Theme.CarLuncher"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".module.main.MainActivity"
             android:screenOrientation="landscape"
             android:exported="true"
             android:theme="@style/Theme.CarLuncher">

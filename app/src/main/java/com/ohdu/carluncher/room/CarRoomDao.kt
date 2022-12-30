@@ -11,12 +11,18 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CarRoomDao {
 
-    @Query("SELECT * FROM app_info_table ORDER BY isShow DESC")
-    fun appInfo(): Flow<List<AppInfoBean>>
+    @Query("SELECT * FROM app_info_table WHERE navShow = :navShow")
+    fun navAppInfo(navShow: Boolean = true): Flow<List<AppInfoBean>>
+
+    @Query("SELECT * FROM app_info_table ORDER BY sortWeight ASC")
+    fun appInfoToFlow(): Flow<List<AppInfoBean>>
+
+    @Query("SELECT * FROM app_info_table ORDER BY sortWeight ASC")
+    fun appInfo(): List<AppInfoBean>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAppInfo(appInfo: List<AppInfoBean>)
 
     @Update
-    fun updateAppInfo(appInfo: AppInfoBean)
+    fun updateAppInfo(vararg appInfo: AppInfoBean)
 }
